@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from "react";
-import { SafeAreaView, View, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import * as SplashScreen from "expo-splash-screen";
 import {
   useFonts,
@@ -28,11 +29,13 @@ export default function App() {
   if (!fontsLoaded) return null;
 
   return (
-    <ThemeProvider>
-      <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
-        <MainLayout />
-      </View>
-    </ThemeProvider>
+    <SafeAreaProvider>
+      <ThemeProvider>
+        <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
+          <MainLayout />
+        </View>
+      </ThemeProvider>
+    </SafeAreaProvider>
   );
 }
 
@@ -41,12 +44,12 @@ const MainLayout = () => {
   const [userName, setUserName] = useState<string | null>(null);
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: theme.background }}>
+    <View style={{ flex: 1, backgroundColor: theme.background }}>
       {userName ? (
         <HomeScreen name={userName} />
       ) : (
         <OnboardingScreen onFinish={(name) => setUserName(name)} />
       )}
-    </SafeAreaView>
+    </View>
   );
 };
