@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
     position: "relative",
   },
   topSection: {
-    paddingTop: 130,
+    paddingTop: 120,
     paddingHorizontal: 24,
     alignItems: "center",
   },
