@@ -1,27 +1,28 @@
-import React, { useState } from "react";
-import { SafeAreaView, StyleSheet } from "react-native";
-import HomeScreen from "./src/screens/HomeScreen";
-import OnboardingScreen from "./src/screens/OnboardingScreen";
+import React, { useState } from 'react'; // <-- WAJIB
+import { SafeAreaView } from 'react-native'; // <-- WAJIB
+import { ThemeProvider, useAppTheme } from './src/constants/ThemeContext';
+import OnboardingScreen from './src/screens/OnboardingScreen';
+import HomeScreen from './src/screens/HomeScreen';
 
 export default function App() {
-  const [userName, setUserName] = useState<string | null>(null);
-
-  const handleFinishOnboarding = (name: string) => {
-    setUserName(name);
-    // Nanti di sini tempat kita simpan nama ke Async Storage (Offline Database)
-  };
-
   return (
-    <SafeAreaView style={styles.root}>
-      {userName ? (
-        <HomeScreen name={userName} />
-      ) : (
-        <OnboardingScreen onFinish={handleFinishOnboarding} />
-      )}
-    </SafeAreaView>
+    <ThemeProvider>
+      <MainLayout />
+    </ThemeProvider>
   );
 }
 
-const styles = StyleSheet.create({
-  root: { flex: 1, backgroundColor: "#fff" },
-});
+const MainLayout = () => {
+  const { theme } = useAppTheme();
+  const [userName, setUserName] = useState<string | null>(null);
+
+  return (
+    <SafeAreaView style={{ flex: 1, backgroundColor: theme.background }}>
+      {userName ? (
+        <HomeScreen name={userName} />
+      ) : (
+        <OnboardingScreen onFinish={(name) => setUserName(name)} />
+      )}
+    </SafeAreaView>
+  );
+};
