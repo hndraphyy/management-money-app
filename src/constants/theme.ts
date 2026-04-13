@@ -1,9 +1,9 @@
 export const colors = {
   light: {
-    background: "#F2F5F7", // Abu-abu sangat muda biar card putihnya "pop"
+    background: "#F2F5F7",
     text: "#2D3436",
     card: "#FFFFFF",
-    primary: "#D63031", // Merah Profesional
+    primary: "#D63031",
     secondary: "#636E72",
     border: "#DFE6E9",
   },
@@ -11,8 +11,13 @@ export const colors = {
     background: "#121212",
     text: "#F8F9FA",
     card: "#1E1E1E",
-    primary: "#FF7675", // Merah yang lebih lembut untuk dark mode
+    primary: "#FF7675",
     secondary: "#B2BEC3",
     border: "#2D3436",
   },
+};
+
+export const fonts = {
+  regular: "Outfit-Regular",
+  bold: "Outfit-Bold",
 };

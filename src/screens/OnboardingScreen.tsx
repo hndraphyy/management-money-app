@@ -24,7 +24,6 @@ export default function OnboardingScreen({ onFinish }: Props) {
       style={[styles.container, { backgroundColor: theme.background }]}
     >
       <View style={styles.content}>
-        {/* Header Section */}
         <Text style={[styles.title, { color: theme.text }]}>
           Selamat Datang
         </Text>
@@ -33,9 +32,10 @@ export default function OnboardingScreen({ onFinish }: Props) {
           Anda.
         </Text>
 
-        {/* Form Card */}
         <View style={[styles.card, { backgroundColor: theme.card }]}>
-          <Text style={[styles.label, { color: theme.text }]}>Nama</Text>
+          <Text style={[styles.label, { color: theme.text }]}>
+            Nama Lengkap
+          </Text>
           <TextInput
             style={[
               styles.input,
@@ -43,6 +43,7 @@ export default function OnboardingScreen({ onFinish }: Props) {
                 color: theme.text,
                 borderBottomColor:
                   name.length > 0 ? theme.primary : theme.border,
+                fontFamily: "Outfit-Regular",
               },
             ]}
             placeholder="Isikan namamu"
@@ -72,25 +73,16 @@ export default function OnboardingScreen({ onFinish }: Props) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  content: {
-    flex: 1,
-    justifyContent: "center",
-    padding: 24,
-  },
-  title: {
-    fontSize: 32,
-    fontWeight: "bold",
-    textAlign: "center",
-  },
+  container: { flex: 1 },
+  content: { flex: 1, justifyContent: "center", padding: 24 },
+  title: { fontSize: 32, textAlign: "center", fontFamily: "Outfit-Bold" },
   subtitle: {
     fontSize: 16,
     textAlign: "center",
     marginTop: 10,
     marginBottom: 40,
     lineHeight: 22,
+    fontFamily: "Outfit-Regular",
   },
   card: {
     padding: 24,
@@ -101,25 +93,13 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 8,
   },
-  label: {
-    fontSize: 14,
-    fontWeight: "600",
-    marginBottom: 8,
-  },
+  label: { fontSize: 14, marginBottom: 8, fontFamily: "Outfit-Bold" },
   input: {
     borderBottomWidth: 1.5,
     fontSize: 18,
     paddingVertical: 12,
     marginBottom: 32,
   },
-  button: {
-    paddingVertical: 16,
-    borderRadius: 12,
-    alignItems: "center",
-  },
-  buttonText: {
-    color: "#FFFFFF",
-    fontSize: 16,
-    fontWeight: "bold",
-  },
+  button: { paddingVertical: 16, borderRadius: 12, alignItems: "center" },
+  buttonText: { color: "#FFFFFF", fontSize: 16, fontFamily: "Outfit-Bold" },
 });

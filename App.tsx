@@ -1,13 +1,37 @@
-import React, { useState } from 'react'; // <-- WAJIB
-import { SafeAreaView } from 'react-native'; // <-- WAJIB
-import { ThemeProvider, useAppTheme } from './src/constants/ThemeContext';
-import OnboardingScreen from './src/screens/OnboardingScreen';
-import HomeScreen from './src/screens/HomeScreen';
+import React, { useState, useCallback } from "react";
+import { SafeAreaView, View, StyleSheet } from "react-native";
+import * as SplashScreen from "expo-splash-screen";
+import {
+  useFonts,
+  Outfit_400Regular,
+  Outfit_700Bold,
+} from "@expo-google-fonts/outfit";
+
+import { ThemeProvider, useAppTheme } from "./src/constants/ThemeContext";
+import OnboardingScreen from "./src/screens/OnboardingScreen";
+import HomeScreen from "./src/screens/HomeScreen";
+
+SplashScreen.preventAutoHideAsync();
 
 export default function App() {
+  const [fontsLoaded] = useFonts({
+    "Outfit-Regular": Outfit_400Regular,
+    "Outfit-Bold": Outfit_700Bold,
+  });
+
+  const onLayoutRootView = useCallback(async () => {
+    if (fontsLoaded) {
+      await SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded]);
+
+  if (!fontsLoaded) return null;
+
   return (
     <ThemeProvider>
-      <MainLayout />
+      <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
+        <MainLayout />
+      </View>
     </ThemeProvider>
   );
 }
