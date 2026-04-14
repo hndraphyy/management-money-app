@@ -1,4 +1,4 @@
-export const toRupiah = (number: number) => {
+export const toRupiah = (number: number = 0): string => {
   return new Intl.NumberFormat("id-ID", {
     style: "currency",
     currency: "IDR",
