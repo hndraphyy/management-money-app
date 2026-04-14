@@ -2,7 +2,7 @@ export const colors = {
   light: {
     background: "#F2F5F7",
     text: "#2D3436",
-    primary: "#E2464b",
+    primary: "#D12F2F",
     secondary: "#636E72",
     border: "#DFE6E9",
   },
@@ -18,5 +18,7 @@ export const colors = {
 
 export const fonts = {
   regular: "Outfit-Regular",
+  medium: "Outfit-Medium",
+  semibold: "Outfit-SemiBold",
   bold: "Outfit-Bold",
 };

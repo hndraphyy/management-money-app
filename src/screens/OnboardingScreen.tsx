@@ -33,8 +33,7 @@ export default function OnboardingScreen({
             Selamat Datang
           </Text>
           <Text style={[styles.subtitle, { color: theme.secondary }]}>
-            Mari saling mengenal lebih dekat untuk mempersonalisasi pengalaman
-            Anda.
+            Stop bocor halus! Catat pengeluaranmu biar masa depan aman
           </Text>
 
           <View style={styles.illustrationContainer}>
@@ -47,7 +46,7 @@ export default function OnboardingScreen({
         </View>
 
         <LinearGradient
-          colors={["#E2464B", "#8E2226"]}
+          colors={["#D12F2F", "#7C1A1D"]}
           start={{ x: 0, y: 0 }}
           end={{ x: 0, y: 1 }}
           style={styles.card}
@@ -112,7 +111,7 @@ const styles = StyleSheet.create({
     fontFamily: "Outfit-Bold",
   },
   subtitle: {
-    fontSize: 16,
+    fontSize: 18,
     textAlign: "center",
     marginTop: 10,
     lineHeight: 22,
