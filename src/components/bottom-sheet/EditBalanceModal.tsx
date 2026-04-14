@@ -10,7 +10,9 @@ import {
   Animated,
   Dimensions,
   Platform,
+  StatusBar,
 } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { toRupiah } from "../../utils/formatCurrency";
 
 const { height } = Dimensions.get("window");
@@ -31,6 +33,7 @@ export const EditBalanceModal = ({
   const [tempValue, setTempValue] = React.useState("");
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(height)).current;
+  const insets = useSafeAreaInsets();
 
   useEffect(() => {
     if (isVisible) {
@@ -71,6 +74,7 @@ export const EditBalanceModal = ({
       visible={isVisible}
       animationType="none"
       onRequestClose={handleClose}
+      statusBarTranslucent
     >
       <View style={styles.container}>
         <TouchableWithoutFeedback onPress={handleClose}>
@@ -78,7 +82,13 @@ export const EditBalanceModal = ({
         </TouchableWithoutFeedback>
 
         <Animated.View
-          style={[styles.sheet, { transform: [{ translateY: slideAnim }] }]}
+          style={[
+            styles.sheet,
+            {
+              transform: [{ translateY: slideAnim }],
+              paddingBottom: Platform.OS === "ios" ? insets.bottom + 24 : 24,
+            },
+          ]}
         >
           <View style={styles.handle} />
           <Text style={styles.title}>Masukkan Nominal Uangmu</Text>
@@ -87,10 +97,11 @@ export const EditBalanceModal = ({
           <TextInput
             style={styles.input}
             keyboardType="numeric"
-            // value={tempValue}
             onChangeText={(t) => setTempValue(t.replace(/[^0-9]/g, ""))}
             placeholder="Masukkan nominal..."
             autoFocus
+            // Tambahkan value untuk controlled component
+            value={tempValue}
           />
 
           <TouchableOpacity
@@ -112,17 +123,26 @@ export const EditBalanceModal = ({
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: "flex-end" },
+  container: {
+    flex: 1,
+    justifyContent: "flex-end",
+    margin: 0,
+  },
   overlay: {
-    ...StyleSheet.absoluteFillObject,
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
     backgroundColor: "rgba(0,0,0,0.6)",
   },
   sheet: {
     backgroundColor: "white",
     borderTopLeftRadius: 28,
     borderTopRightRadius: 28,
-    padding: 24,
-    minHeight: 350,
+    paddingHorizontal: 24,
+    paddingTop: 12,
+    width: "100%",
   },
   handle: {
     width: 40,
@@ -162,9 +182,14 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: "#D12F2F",
   },
-  btnTextSave: { color: "white", fontFamily: "Outfit-SemiBold", fontSize: 16 },
+  btnTextSave: {
+    color: "white",
+    fontFamily: "Outfit-SemiBold",
+    fontSize: 16,
+  },
   btnclose: {
     marginTop: 12,
+    marginBottom: 8,
     padding: 14,
     borderRadius: 12,
     alignItems: "center",
