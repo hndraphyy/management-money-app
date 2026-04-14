@@ -63,7 +63,8 @@ export default function HomeScreen({ name }: { name: string }) {
 
   const handleSave = () => {
     if (tempBalance.trim()) {
-      setTempBalance(tempBalance);
+      const numericValue = Number(tempBalance);
+      setBalance(numericValue);
     }
     toggleModal(false);
   };
@@ -83,7 +84,7 @@ export default function HomeScreen({ name }: { name: string }) {
           </Text>
 
           <View style={styles.balanceRow}>
-            <Text style={styles.balance}>Rp {balance}</Text>
+            <Text style={styles.balance}>{toRupiah(balance)}</Text>
             <TouchableOpacity
               onPress={() => toggleModal(true)}
               style={styles.editBtn}
@@ -116,15 +117,17 @@ export default function HomeScreen({ name }: { name: string }) {
             <View style={styles.handleBar} />
 
             <View style={styles.modalContent}>
-              <Text style={styles.modalTitle}>Masukkan Uangmu</Text>
+              <Text style={styles.modalTitle}>Masukkan Nominal Uangmu</Text>
 
               <TextInput
                 style={styles.input}
-                placeholder="Masukkan saldo baru"
+                placeholder="Contoh: 500000"
                 placeholderTextColor="#999"
                 keyboardType="numeric"
                 value={tempBalance}
-                onChangeText={setTempBalance}
+                onChangeText={(text) =>
+                  setTempBalance(text.replace(/[^0-9]/g, ""))
+                }
                 autoFocus={true}
               />
 
