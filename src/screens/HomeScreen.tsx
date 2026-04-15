@@ -72,8 +72,6 @@ const styles = StyleSheet.create({
     paddingTop: 60,
     paddingHorizontal: 24,
     paddingBottom: 40,
-    borderBottomLeftRadius: 32,
-    borderBottomRightRadius: 32,
   },
   welcome: { fontSize: 18, color: "white", fontFamily: "Outfit-SemiBold" },
   balanceTitle: {

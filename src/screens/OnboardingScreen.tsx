@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   View,
   Text,
@@ -8,6 +8,8 @@ import {
   KeyboardAvoidingView,
   Platform,
   Image,
+  Keyboard,
+  Animated,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useAppTheme } from "../constants/ThemeContext";
@@ -21,12 +23,46 @@ export default function OnboardingScreen({
 }) {
   const { theme } = useAppTheme();
   const [name, setName] = useState("");
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
+  const translateY = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    const keyboardWillShow = Keyboard.addListener(
+      Platform.OS === "ios" ? "keyboardWillShow" : "keyboardDidShow",
+      (e) => {
+        setKeyboardHeight(e.endCoordinates.height);
+        Animated.spring(translateY, {
+          toValue: -e.endCoordinates.height / 1,
+          useNativeDriver: true,
+          damping: 20,
+          mass: 1,
+          stiffness: 200,
+        }).start();
+      },
+    );
+
+    const keyboardWillHide = Keyboard.addListener(
+      Platform.OS === "ios" ? "keyboardWillHide" : "keyboardDidHide",
+      () => {
+        setKeyboardHeight(0);
+        Animated.spring(translateY, {
+          toValue: 0,
+          useNativeDriver: true,
+          damping: 20,
+          mass: 1,
+          stiffness: 200,
+        }).start();
+      },
+    );
+
+    return () => {
+      keyboardWillShow.remove();
+      keyboardWillHide.remove();
+    };
+  }, []);
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : undefined}
-      style={[styles.container, { backgroundColor: theme.background }]}
-    >
+    <View style={[styles.container, { backgroundColor: theme.background }]}>
       <View style={styles.content}>
         <View style={styles.topSection}>
           <Text style={[styles.title, { color: theme.primary }]}>
@@ -36,54 +72,61 @@ export default function OnboardingScreen({
             Stop bocor halus! Catat pengeluaranmu biar masa depan aman
           </Text>
 
-          <View style={styles.illustrationContainer}>
-            <Image
-              source={OnboardingImg}
-              style={{ width: 220, height: 220 }}
-              resizeMode="contain"
-            />
-          </View>
+          <Image
+            source={OnboardingImg}
+            style={{ width: 270, height: 280, marginLeft: 20, marginTop: 10 }}
+            resizeMode="contain"
+          />
         </View>
 
-        <LinearGradient
-          colors={["#D12F2F", "#7C1A1D"]}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 0, y: 1 }}
-          style={styles.card}
+        <Animated.View
+          style={[
+            styles.cardWrapper,
+            {
+              transform: [{ translateY }],
+            },
+          ]}
         >
-          <Text style={[styles.label, { color: "#FFFFFF" }]}>Nama</Text>
-          <TextInput
-            style={[
-              styles.input,
-              {
-                color: "#FFFFFF",
-                borderBottomColor: "#FFFFFF80",
-                fontFamily: "Outfit-Regular",
-              },
-            ]}
-            placeholder="Isikan namamu"
-            placeholderTextColor="#FFFFFF90"
-            value={name}
-            onChangeText={setName}
-            autoCapitalize="words"
-          />
-
-          <TouchableOpacity
-            style={[
-              styles.button,
-              {
-                backgroundColor: "white",
-                opacity: name.trim().length >= 3 ? 1 : 0.8,
-              },
-            ]}
-            disabled={name.trim().length < 3}
-            onPress={() => onFinish(name)}
+          <LinearGradient
+            colors={["#D12F2F", "#7C1A1D"]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 0, y: 1 }}
+            style={styles.card}
           >
-            <Text style={styles.buttonText}>Simpan</Text>
-          </TouchableOpacity>
-        </LinearGradient>
+            <Text style={[styles.label, { color: "#FFFFFF" }]}>Nama</Text>
+            <TextInput
+              style={[
+                styles.input,
+                {
+                  color: "#FFFFFF",
+                  borderBottomColor: "#FFFFFF80",
+                  fontFamily: "Outfit-Regular",
+                },
+              ]}
+              placeholder="Isikan namamu"
+              placeholderTextColor="#FFFFFF90"
+              value={name}
+              onChangeText={setName}
+              autoCapitalize="words"
+            />
+
+            <TouchableOpacity
+              style={[
+                styles.button,
+                {
+                  backgroundColor: "white",
+                  opacity: name.trim().length >= 3 ? 1 : 0.8,
+                },
+              ]}
+              disabled={name.trim().length < 3}
+              onPress={() => onFinish(name)}
+            >
+              <Text style={styles.buttonText}>Simpan</Text>
+            </TouchableOpacity>
+          </LinearGradient>
+        </Animated.View>
       </View>
-    </KeyboardAvoidingView>
+    </View>
   );
 }
 
@@ -102,7 +145,7 @@ const styles = StyleSheet.create({
   },
   illustrationContainer: {
     alignItems: "center",
-    marginVertical: 50,
+    marginVertical: 30,
     width: "100%",
   },
   title: {
@@ -118,16 +161,20 @@ const styles = StyleSheet.create({
     fontFamily: "Outfit-Regular",
     paddingHorizontal: 10,
   },
-  card: {
+  cardWrapper: {
     width: "100%",
     position: "absolute",
     bottom: 0,
+    left: 0,
+    right: 0,
+  },
+  card: {
+    width: "100%",
     borderTopLeftRadius: 40,
     borderTopRightRadius: 40,
     paddingHorizontal: 32,
     paddingVertical: 40,
-    marginTop: 20,
-    paddingBottom: 80,
+    paddingBottom: Platform.OS === "ios" ? 90 : 100,
   },
   label: {
     fontSize: 18,
